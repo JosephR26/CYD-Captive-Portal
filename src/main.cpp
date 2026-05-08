@@ -28,7 +28,7 @@ const int MENU_COUNT = 3;
 PortalTemplate g_selected_template = TEMPLATE_GENERIC;
 String g_custom_templates[10];
 int g_custom_count = 0;
-String g_all_template_names[14];
+String g_all_template_names[30];
 int g_total_templates = 0;
 
 void scan_sd_templates() {
@@ -93,7 +93,7 @@ void handle_menu() {
                     
                     // Prepare combined list
                     g_total_templates = 0;
-                    for (int i = 0; i < 4; i++) {
+                    for (int i = 0; i < 20; i++) {
                         g_all_template_names[g_total_templates++] = TEMPLATE_NAMES[i];
                     }
                     for (int i = 0; i < g_custom_count; i++) {
@@ -101,7 +101,7 @@ void handle_menu() {
                     }
                     
                     // Convert to const char* array for display
-                    const char* names[14];
+                    const char* names[30];
                     for (int i = 0; i < g_total_templates; i++) {
                         names[i] = g_all_template_names[i].c_str();
                     }
@@ -127,7 +127,7 @@ void handle_template_select() {
         if (p.y > 30 && p.y < 240) {
             int clicked_item = (p.y - 30) / 25;
             if (clicked_item >= 0 && clicked_item < g_total_templates) {
-                if (clicked_item < 4) {
+                if (clicked_item < 20) {
                     // Built-in template
                     g_selected_template = (PortalTemplate)clicked_item;
                     g_state = STATE_CAPTIVE_PORTAL;
@@ -135,7 +135,7 @@ void handle_template_select() {
                     portal.begin("Free WiFi", g_selected_template);
                 } else {
                     // SD Card template
-                    int sd_idx = clicked_item - 4;
+                    int sd_idx = clicked_item - 20;
                     g_state = STATE_CAPTIVE_PORTAL;
                     display_show_status("PORTAL", "Starting AP...", "SSID: Free WiFi");
                     portal.begin("Free WiFi", TEMPLATE_GENERIC, g_custom_templates[sd_idx]);
