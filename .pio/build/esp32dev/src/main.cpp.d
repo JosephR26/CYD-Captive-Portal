@@ -137,6 +137,8 @@
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal-spi.h \
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/LittleFS/src/LittleFS.h \
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
+ /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/SD/src/SD.h \
+ /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/SD/src/sd_defines.h \
  include/pins.h include/display.h \
  .pio/libdeps/esp32dev/TFT_eSPI/TFT_eSPI.h \
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/cores/esp32/Print.h \

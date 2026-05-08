@@ -206,4 +206,9 @@
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/cores/esp32/StreamString.h \
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/DNSServer/src/DNSServer.h \
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
- include/portal_html.h include/logger.h
+ include/portal_html.h \
+ /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/SD/src/SD.h \
+ /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/SPI/src/SPI.h \
+ /home/ubuntu/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal-spi.h \
+ /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/SD/src/sd_defines.h \
+ include/logger.h
