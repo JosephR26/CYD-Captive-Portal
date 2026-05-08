@@ -8,6 +8,7 @@
 
 enum AppState {
     STATE_MENU,
+    STATE_TEMPLATE_SELECT,
     STATE_CAPTIVE_PORTAL,
     STATE_LOGS
 };
@@ -22,6 +23,8 @@ const char* MENU_ITEMS[] = {
     "REBOOT"
 };
 const int MENU_COUNT = 3;
+
+PortalTemplate g_selected_template = TEMPLATE_GENERIC;
 
 void setup() {
     Serial.begin(115200);
@@ -51,9 +54,8 @@ void handle_menu() {
                 
                 // Action on click
                 if (g_cursor == 0) {
-                    g_state = STATE_CAPTIVE_PORTAL;
-                    display_show_status("PORTAL", "Starting AP...", "SSID: Free WiFi");
-                    portal.begin("Free WiFi");
+                    g_state = STATE_TEMPLATE_SELECT;
+                    display_show_menu(TEMPLATE_NAMES, 4, 0);
                 } else if (g_cursor == 1) {
                     g_state = STATE_LOGS;
                     display_show_logs();
@@ -66,10 +68,31 @@ void handle_menu() {
     last_pressed = p.pressed;
 }
 
+void handle_template_select() {
+    TouchPoint p = display_get_touch();
+    static bool last_pressed = false;
+    
+    if (p.pressed && !last_pressed) {
+        if (p.y > 30 && p.y < 240) {
+            int clicked_item = (p.y - 30) / 25;
+            if (clicked_item >= 0 && clicked_item < 4) {
+                g_selected_template = (PortalTemplate)clicked_item;
+                g_state = STATE_CAPTIVE_PORTAL;
+                display_show_status("PORTAL", "Starting AP...", "SSID: Free WiFi");
+                portal.begin("Free WiFi", g_selected_template);
+            }
+        }
+    }
+    last_pressed = p.pressed;
+}
+
 void loop() {
     switch (g_state) {
         case STATE_MENU:
             handle_menu();
+            break;
+        case STATE_TEMPLATE_SELECT:
+            handle_template_select();
             break;
         case STATE_CAPTIVE_PORTAL:
             {

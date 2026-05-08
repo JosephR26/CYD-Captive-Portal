@@ -304,4 +304,5 @@
  .pio/libdeps/esp32dev/ESPAsyncWebServer/src/WebResponseImpl.h \
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/cores/esp32/StreamString.h \
  /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/DNSServer/src/DNSServer.h \
- /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h
+ /home/ubuntu/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
+ include/portal_html.h

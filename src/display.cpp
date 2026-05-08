@@ -56,7 +56,7 @@ void display_init() {
     delay(1000);
 }
 
-void display_show_menu(const char** items, int count, int selected) {
+void display_show_menu(const char* const* items, int count, int selected) {
     tft.fillScreen(CP_BLACK);
     draw_glitch_header("SYSTEM_MENU", CP_CYAN);
     
